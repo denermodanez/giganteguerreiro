@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portfólio Artístico - Estilo Livro</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      scroll-behavior: smooth;
+      overflow: hidden;
+    }
+
+    .menu-bar {
+      position: fixed;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 101;
+      display: flex;
+      gap: 20px;
+      padding: 10px 20px;
+      background: rgba(0, 0, 0, 0.7);
+      border-radius: 0 0 10px 10px;
+    }
+    .menu-bar button {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .menu-bar button.active {
+      font-weight: bold;
+      text-decoration: underline;
+      color: #FF4D4D;
+    }
+
+    .page-container {
+      display: flex;
+      flex-direction: row;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      height: 100vh;
+      width: 100vw;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .page-container::-webkit-scrollbar {
+      display: none;
+    }
+    .page {
+      scroll-snap-align: start;
+      flex: 0 0 100vw;
+      height: 100vh;
+      padding: 60px;
+      box-sizing: border-box;
+      position: relative;
+    }
+
+    .parallax-bg {
+      position: absolute;
+      inset: 0;
+      background-image: url('sua-imagem.jpg');
+      background-size: cover;
+      background-position: center;
+      background-attachment: scroll;
+      z-index: 0;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      text-align: center;
+      color: white;
+    }
+
+    .bg-dark-red {
+      background-color: #8B0000;
+      color: white;
+    }
+    .text-red {
+      color: #8B0000;
+    }
+    .btn-red {
+      background-color: #8B0000;
+      color: white;
+    }
+    .btn-red:hover {
+      background-color: #a80000;
+    }
+
+    @media (min-width: 801px) {
+      html, body {
+        overflow-x: hidden;
+      }
+      .page-container {
+        display: block;
+        overflow-x: hidden;
+        overflow-y: auto;
+        height: auto;
+        width: 100%;
+      }
+      .page {
+        width: 100%;
+        height: 100vh;
+        scroll-margin-top: 60px;
+      }
+      .parallax-bg {
+        background-attachment: fixed;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="menu-bar" id="menuBar">
+    <button onclick="goTo('inicio')">Início</button>
+    <button onclick="goTo('sobre')">Sobre</button>
+    <button onclick="goTo('hqs')">HQs</button>
+    <button onclick="goTo('contato')">Contato</button>
+    <button onclick="goTo('rodape')">Rodapé</button>
+  </div>
+
+  <div class="page-container" id="pageContainer">
+    <section id="inicio" class="page">
+      <div class="parallax-bg" id="parallaxBg"></div>
+      <div class="hero-content">
+        <h1 class="display-3 fw-bold">Seu Nome Artístico</h1>
+        <p class="lead">Quadrinista e contador de histórias visuais</p>
+        <a href="#" class="btn btn-red mt-3" onclick="goTo('sobre')">Começar</a>
+      </div>
+    </section>
+
+    <section id="sobre" class="page bg-light">
+      <h2 class="text-red">Sobre Mim</h2>
+      <p>Sou um quadrinista com foco em narrativas emocionais e visuais impactantes. Meus trabalhos misturam técnicas digitais com traços tradicionais, explorando temas como fantasia, cotidiano e simbolismo.</p>
+      <p>Participei de feiras independentes e publiquei obras autorais, além de colaborações com roteiristas e editoras.</p>
+    </section>
+
+    <section id="hqs" class="page">
+      <h2 class="text-red">HQs em Destaque</h2>
+      <div class="row g-4">
+        <div class="col-12 col-md-4">
+          <img src="hq1.jpg" class="img-fluid rounded shadow-sm" alt="Página HQ 1">
+          <p class="mt-2">Título 1</p>
+        </div>
+        <div class="col-12 col-md-4">
+          <img src="hq2.jpg" class="img-fluid rounded shadow-sm" alt="Página HQ 2">
+          <p class="mt-2">Título 2</p>
+        </div>
+        <div class="col-12 col-md-4">
+          <img src="hq3.jpg" class="img-fluid rounded shadow-sm" alt="Página HQ 3">
+          <p class="mt-2">Título 3</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="contato" class="page bg-dark-red">
+      <h2 class="text-center">Contato</h2>
+      <form action="https://formsubmit.co/SEUEMAIL@exemplo.com" method="POST" class="mx-auto" style="max-width: 600px;">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_next" value="https://SEUNOME.github.io/obrigado.html">
+        <div class="mb-3">
+          <label for="nome" class="form-label">Nome</label>
+          <input type="text" name="nome" class="form-control" required>
+        </div>
+        <div class="mb-3">
+          <label for="email" class="form-label">E-mail</label>
+          <input type="email" name="email" class="form-control" required>
+        </div>
+        <div class="mb-3">
+          <label for="mensagem" class="form-label">Mensagem</label>
+          <textarea name="mensagem" rows="4" class="form-control" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-light">Enviar</button>
+      </form>
+    </section>
+
+    <section id="rodape" class="page bg-dark text-white d-flex flex-column justify-content-center align-items-center">
+      <p>&copy; 2025 Seu Nome Artístico</p>
+      <p>
+        <a href="#" class="text-white me-2">Instagram</a> |
+        <a href="#" class="text-white ms-2">Behance</a>
+      </p>
+    </section>
+  </div>
+
+  <script>
+    const sections = document.querySelectorAll(".page");
+    const menuButtons = document.querySelectorAll(".menu-bar button");
+    const parallaxBg = document.getElementById('parallaxBg');
+
+    function goTo(id) {
+      document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function highlightMenu() {
+      let index = sections.length;
+      while(--index && window.scrollY + 100 < sections[index].offsetTop) {}
+      menuButtons.forEach(btn => btn.classList.remove("active"));
+      if (window.innerWidth > 800) {
+        menuButtons[index].classList.add("active");
+      } else {
+        const scrollLeft = document.getElementById('pageContainer').scrollLeft;
+        const pageWidth = window.innerWidth;
+        const activeIndex = Math.round(scrollLeft / pageWidth);
+        menuButtons.forEach((btn, i) => {
+          btn.classList.toggle('active', i === activeIndex);
+        });
+      }
+    }
+
+    function handleScroll() {
+      if (window.innerWidth > 800 && parallaxBg) {
+        const offset = window.scrollY;
+        parallaxBg.style.backgroundPositionY = offset * 0.5 + 'px';
+      }
+    }
+
+    if (window.innerWidth > 800) {
+      window.addEventListener("scroll", () => {
+        highlightMenu();
+        handleScroll();
+      });
+    } else {
+      document.getElementById('pageContainer').addEventListener("scroll", highlightMenu);
+    }
+
+    highlightMenu();
+  </script>
+</body>
+</html>

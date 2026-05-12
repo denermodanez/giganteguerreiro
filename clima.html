@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clima Dinâmico com Tema Adaptativo</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      overflow: hidden;
+      font-family: Arial, sans-serif;
+      transition: background 1s, color 1s;
+    }
+
+    .sky, .stars, .rain {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 0;
+    }
+
+    .cloud {
+      position: absolute;
+      background: white;
+      border-radius: 50%;
+      opacity: 0.8;
+      animation: moveClouds linear infinite;
+    }
+
+    @keyframes moveClouds {
+      0% { left: -200px; }
+      100% { left: 110%; }
+    }
+
+    .raindrop {
+      position: absolute;
+      top: -10%;
+      width: 2px;
+      height: 15px;
+      background: rgba(255, 255, 255, 0.5);
+      animation: fall linear infinite;
+      transform-origin: center;
+    }
+
+    @keyframes fall {
+      to {
+        transform: translateY(110vh) translateX(var(--wind-shift, 0px));
+      }
+    }
+
+    .star {
+      position: absolute;
+      background: white;
+      border-radius: 50%;
+      opacity: 0.8;
+      animation: twinkle 2s infinite alternate;
+    }
+
+    @keyframes twinkle {
+      0% { opacity: 0.5; }
+      100% { opacity: 1; }
+    }
+
+    .content {
+      position: relative;
+      z-index: 1;
+      margin: 20px auto;
+      padding: 20px;
+      width: 90%;
+      max-width: 600px;
+      background: rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 15px;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+      transition: background 0.5s, color 0.5s;
+    }
+
+    .light-theme {
+      color: #000;
+      background: rgba(255, 255, 255, 0.4);
+    }
+
+    .dark-theme {
+      color: #fff;
+      background: rgba(0, 0, 0, 0.3);
+    }
+  </style>
+</head>
+<body>
+  <div class="content" id="content">
+    <h1>Clima Atual</h1>
+    <p id="info">Obtendo localização e clima...</p>
+    <p>Conteúdo exemplo dentro do painel de vidro. Aqui você pode inserir informações adicionais, como previsão detalhada, avisos ou curiosidades.</p>
+  </div>
+
+  <div class="sky" id="sky"></div>
+  <div class="stars" id="stars"></div>
+  <div class="rain" id="rain"></div>
+
+  <script>
+    const info = document.getElementById('info');
+    const content = document.getElementById('content');
+    const skyContainer = document.getElementById('sky');
+    const rainContainer = document.getElementById('rain');
+    const starsContainer = document.getElementById('stars');
+
+    if ('geolocation' in navigator) {
+      navigator.geolocation.getCurrentPosition(async position => {
+        const latitude = position.coords.latitude;
+        const longitude = position.coords.longitude;
+
+        try {
+          const response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true`);
+          const data = await response.json();
+          const weather = data.current_weather;
+          const isDay = weather.is_day === 1;
+          const windSpeed = weather.windspeed;
+          const condition = getCondition(weather.weathercode);
+
+          info.textContent = `Temperatura: ${weather.temperature}°C - Vento: ${windSpeed} km/h - Condição: ${condition.label} - ${isDay ? 'Dia' : 'Noite'}`;
+
+          applyBackground(condition, isDay);
+          applyTheme(isDay);
+
+          if (isDay && condition.clouds > 0) {
+            gerarNuvens(condition.clouds, windSpeed);
+          }
+
+          if (!isDay) {
+            gerarEstrelas(100);
+          }
+
+          if (condition.rainIntensity > 0) {
+            gerarChuva(condition.rainIntensity, windSpeed);
+          }
+
+        } catch (err) {
+          console.error(err);
+          info.textContent = 'Erro ao obter clima.';
+        }
+      }, error => {
+        console.error(error);
+        info.textContent = 'Erro ao obter localização.';
+      });
+    } else {
+      info.textContent = 'Geolocalização não suportada.';
+    }
+
+    function applyTheme(isDay) {
+      if (isDay) {
+        content.classList.add('light-theme');
+        content.classList.remove('dark-theme');
+      } else {
+        content.classList.add('dark-theme');
+        content.classList.remove('light-theme');
+      }
+    }
+
+    function getCondition(code) {
+      if (code === 0) {
+        return { label: 'Céu limpo', background: '#87CEEB', clouds: 0, rainIntensity: 0 };
+      } else if ([1,2,3].includes(code)) {
+        return { label: 'Poucas Nuvens', background: '#ADD8E6', clouds: 5, rainIntensity: 0 };
+      } else if ([61,80].includes(code)) {
+        return { label: 'Chuva Fraca', background: '#4ca1af', clouds: 8, rainIntensity: 50 };
+      } else if ([63,81].includes(code)) {
+        return { label: 'Chuva Moderada', background: '#455A64', clouds: 10, rainIntensity: 100 };
+      } else if ([65,82].includes(code)) {
+        return { label: 'Chuva Forte', background: '#37474F', clouds: 12, rainIntensity: 200 };
+      } else {
+        return { label: 'Clima desconhecido', background: '#cccccc', clouds: 3, rainIntensity: 0 };
+      }
+    }
+
+    function applyBackground(condition, isDay) {
+      if (isDay) {
+        document.body.style.background = condition.background;
+      } else {
+        document.body.style.background = 'linear-gradient(#000000, #0b3d91)';
+      }
+    }
+
+    function gerarNuvens(qtde, windSpeed) {
+      for (let i = 0; i < qtde; i++) {
+        const cloud = document.createElement('div');
+        cloud.classList.add('cloud');
+
+        const size = 60 + Math.random() * 60;
+        cloud.style.width = size + 'px';
+        cloud.style.height = size * 0.6 + 'px';
+        cloud.style.top = Math.random() * window.innerHeight * 0.5 + 'px';
+        cloud.style.left = -200 + 'px';
+
+        const duration = mapearVentoParaDuracao(windSpeed, 20, 60);
+        cloud.style.animationDuration = duration + 's';
+
+        skyContainer.appendChild(cloud);
+      }
+    }
+
+    function gerarChuva(qtde, windSpeed = 0) {
+      const maxShift = 50;
+      const normalizedWind = Math.min(windSpeed / 60, 1);
+      const windShift = maxShift * normalizedWind;
+
+      for (let i = 0; i < qtde; i++) {
+        const drop = document.createElement('div');
+        drop.classList.add('raindrop');
+        drop.style.left = Math.random() * 100 + 'vw';
+        drop.style.animationDuration = 0.4 + Math.random() * 0.5 + 's';
+        drop.style.opacity = Math.random();
+        drop.style.setProperty('--wind-shift', `${windShift}px`);
+        drop.style.transform = `skewX(-${normalizedWind * 15}deg)`;
+
+        rainContainer.appendChild(drop);
+      }
+    }
+
+    function gerarEstrelas(qtde) {
+      for (let i = 0; i < qtde; i++) {
+        const star = document.createElement('div');
+        star.classList.add('star');
+
+        const size = Math.random() * 3 + 1;
+        star.style.width = size + 'px';
+        star.style.height = size + 'px';
+        star.style.top = Math.random() * window.innerHeight + 'px';
+        star.style.left = Math.random() * window.innerWidth + 'px';
+        star.style.animationDuration = 1 + Math.random() * 2 + 's';
+
+        starsContainer.appendChild(star);
+      }
+    }
+
+    function mapearVentoParaDuracao(vento, minVento, maxVento) {
+      const minDuration = 30;
+      const maxDuration = 100;
+      const clampedVento = Math.max(minVento, Math.min(vento, maxVento));
+      const fator = (clampedVento - minVento) / (maxVento - minVento);
+      return maxDuration - fator * (maxDuration - minDuration);
+    }
+  </script>
+</body>
+</html>
