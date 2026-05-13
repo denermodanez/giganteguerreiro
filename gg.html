@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="icon" type="image/png" href="imgs/favicon.jpg">
     <title>Eder Modanez | Ateliê Gigante Guerreiro</title>
     <style>
         /* Variáveis de Cores */
@@ -28,17 +29,19 @@
         .nav-menu { display: flex; list-style: none; align-items: center; width: 100%; justify-content: space-between; }
         .nav-group { display: flex; gap: 30px; flex: 1; justify-content: center; }
         
-        .logo { font-weight: bold; font-size: 1.5rem; color: var(--primary); text-decoration: none; padding: 0 20px;}
-		
-		.logo {
-			display: flex;
-			align-items: flex-end; /* Alinha o conteúdo ao final (baixo) */
-			height: 300px; /* Altura necessária para ver o efeito */
-		}
-		.logo-img {
-			height: 100px; /* Exemplo de altura */
+		.logo { 
+			font-weight: bold; 
+			font-size: 1.5rem; 
+			color: var(--primary); 
+			text-decoration: none; 
 		}
 
+		.logo img {
+			height: 150px; /* Aumente ou ajuste a altura máxima conforme desejar */
+			margin-top:80px;
+			width: auto;  
+		}
+		
         /* Links e Dropdowns */
         .nav-item { position: relative; }
         .nav-item a { text-decoration: none; color: var(--dark); font-weight: 600; text-transform: uppercase; font-size: 0.9rem; transition: 0.3s; }
@@ -68,6 +71,7 @@
         }
         .btn-portfolio:hover { background: var(--dark); }
 
+		
         /* Estilo Específico: Loja */
         .loja-box { text-align: center; background: var(--gray); padding: 50px; border-radius: 10px; }
         .btn-loja { color: var(--primary); font-weight: bold; text-decoration: underline; font-size: 1.2rem; }
@@ -78,11 +82,17 @@
         .copyright { margin-top: 20px; font-size: 0.85rem; max-width: 700px; margin-left: auto; margin-right: auto; opacity: 0.8; }
 
         /* Responsividade */
-        @media (max-width: 768px) {
-            .nav-group { gap: 15px; }
-            .nav-item a { font-size: 0.75rem; }
-            .logo { font-size: 1rem; }
-        }
+		@media (max-width: 768px) {
+			.nav-group { gap: 10px; } /* Reduz o espaço entre os links */
+			.nav-item a { font-size: 0.75rem; }
+			.logo { padding: 0 5px; margin-top: -30px;}
+			
+			/* Controla o tamanho da imagem do logo no celular */
+			.logo img {
+				height: 100px; /* Altura menor para caber na tela do celular */
+			}
+		}
+		
     </style>
 </head>
 <body>
