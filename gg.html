@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="icon" type="image/png" href="imgs/favicon.jpg">
+    <link rel="icon" type="image/png" href="imgs/favicon.jpg">
     <title>Eder Modanez | Ateliê Gigante Guerreiro</title>
     <style>
         /* Variáveis de Cores */
@@ -15,84 +15,173 @@
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: var(--dark); background: var(--light); scroll-behavior: smooth; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            line-height: 1.6; 
+            color: var(--dark); 
+            background: var(--light); 
+            scroll-behavior: smooth; 
+        }
 
+        /* ==========================================================================
+           ESTILOS MOBILE-FIRST (Padrão para Celulares)
+           ========================================================================== */
+        
         /* Navegação */
         header {
-            position: fixed; width: 100%; top: 0; background: var(--light);
-            border-bottom: 2px solid var(--dark); z-index: 1000;
+            position: fixed; 
+            width: 100%; 
+            top: 0; 
+            background: var(--light);
+            border-bottom: 2px solid var(--dark); 
+            z-index: 1000;
         }
         nav {
-            max-width: 1200px; margin: 0 auto; display: flex;
-            align-items: center; justify-content: center; height: 80px;
+            max-width: 1200px; 
+            margin: 0 auto; 
+            display: flex;
+            align-items: flex-start; /* Alinha o conteúdo ao topo no mobile */
+            justify-content: center; 
+            height: 60px; /* Menu mais baixo no mobile */
         }
-        .nav-menu { display: flex; list-style: none; align-items: center; width: 100%; justify-content: space-between; }
-        .nav-group { display: flex; gap: 30px; flex: 1; justify-content: center; }
+        .nav-menu { 
+            display: flex; 
+            list-style: none; 
+            align-items: flex-start; /* Força itens ao topo */
+            width: 100%; 
+            justify-content: space-between; 
+            padding: 10px 5px 0 5px;
+        }
+        .nav-group { 
+            display: flex; 
+            gap: 10px; 
+            flex: 1; 
+            justify-content: center;
+            padding-top: 5px; /* Alinhamento óptico com o logo */
+        }
         
-		.logo { 
-			font-weight: bold; 
-			font-size: 1.5rem; 
-			color: var(--primary); 
-			text-decoration: none; 
-		}
-
-		.logo img {
-			height: 150px; /* Aumente ou ajuste a altura máxima conforme desejar */
-			margin-top:80px;
-			width: auto;  
-		}
-		
+        .logo { 
+            text-decoration: none; 
+            align-self: flex-start; /* Fixa o link do logo estritamente no topo */
+            margin-top: -10px; /* Compensa o padding do menu */
+        }
+        .logo img {
+            height: 75px; /* Tamanho proporcional seguro para telas pequenas */
+            width: auto;  
+            display: block;
+        }
+        
         /* Links e Dropdowns */
         .nav-item { position: relative; }
-        .nav-item a { text-decoration: none; color: var(--dark); font-weight: 600; text-transform: uppercase; font-size: 0.9rem; transition: 0.3s; }
+        .nav-item a { 
+            text-decoration: none; 
+            color: var(--dark); 
+            font-weight: 600; 
+            text-transform: uppercase; 
+            font-size: 0.75rem; 
+            transition: 0.3s; 
+        }
         .nav-item a:hover { color: var(--primary); }
 
+        /* Submenus em telas de toque abrem abaixo do item */
         .submenu {
-            position: absolute; top: 100%; left: 0; background: var(--dark);
-            list-style: none; display: none; min-width: 220px; padding: 10px 0; border-radius: 4px;
+            position: absolute; 
+            top: 100%; 
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--dark);
+            list-style: none; 
+            display: none; 
+            min-width: 160px; 
+            padding: 5px 0; 
+            border-radius: 4px;
         }
-        .submenu li a { color: var(--light); padding: 10px 20px; display: block; text-transform: none; }
-        .submenu li a:hover { background: var(--primary); color: var(--light); }
+        .submenu li a { 
+            color: var(--light); 
+            padding: 8px 12px; 
+            display: block; 
+            text-transform: none; 
+            font-size: 0.8rem;
+            text-align: center;
+        }
+        .submenu li a:hover { background: var(--primary); }
         .nav-item:hover .submenu { display: block; }
 
         /* Seções */
-        section { padding: 100px 20px; max-width: 1200px; margin: 0 auto; min-height: 80vh; border-bottom: 1px solid #eee; }
-        h2 { color: var(--primary); margin-bottom: 30px; font-size: 2rem; text-align: center; }
+        section { 
+            padding: 90px 20px 50px 20px; /* Margem superior para não cobrir o conteúdo devido ao header fixo */
+            max-width: 1200px; 
+            margin: 0 auto; 
+            min-height: 80vh; 
+            border-bottom: 1px solid #eee; 
+        }
+        h2 { color: var(--primary); margin-bottom: 20px; font-size: 1.75rem; text-align: center; }
 
         /* Estilo Específico: Sobre */
-        .sobre-container { display: flex; gap: 40px; align-items: center; flex-wrap: wrap; }
-        .sobre-foto { flex: 1; min-width: 300px; text-align: center; }
-        .sobre-foto img { width: 100%; max-width: 350px; border-radius: 8px; border: 5px solid var(--dark); }
-        .sobre-texto { flex: 2; min-width: 300px; }
+        .sobre-container { 
+            display: flex; 
+            flex-direction: column; /* Empilhado no mobile */
+            gap: 30px; 
+            align-items: center; 
+        }
+        .sobre-foto { width: 100%; text-align: center; }
+        .sobre-foto img { width: 100%; max-width: 280px; border-radius: 8px; border: 4px solid var(--dark); }
+        .sobre-texto { width: 100%; text-align: center; }
         .btn-portfolio { 
-            display: inline-block; margin-top: 20px; padding: 12px 25px; 
-            background: var(--primary); color: white; text-decoration: none; 
-            font-weight: bold; border-radius: 5px; transition: 0.3s;
+            display: inline-block; 
+            margin-top: 20px; 
+            padding: 12px 25px; 
+            background: var(--primary); 
+            color: white; 
+            text-decoration: none; 
+            font-weight: bold; 
+            border-radius: 5px; 
+            transition: 0.3s;
+            width: 100%; /* Botão largo no mobile para facilitar o toque */
+            max-width: 280px;
         }
         .btn-portfolio:hover { background: var(--dark); }
 
-		
         /* Estilo Específico: Loja */
-        .loja-box { text-align: center; background: var(--gray); padding: 50px; border-radius: 10px; }
-        .btn-loja { color: var(--primary); font-weight: bold; text-decoration: underline; font-size: 1.2rem; }
+        .loja-box { text-align: center; background: var(--gray); padding: 30px 20px; border-radius: 10px; }
+        .btn-loja { color: var(--primary); font-weight: bold; text-decoration: underline; font-size: 1.1rem; word-break: break-all; }
 
         /* Rodapé */
-        footer { background: var(--dark); color: var(--light); padding: 40px 20px; text-align: center; }
+        footer { background: var(--dark); color: var(--light); padding: 40px 20px; text-align: center; font-size: 0.9rem; }
         footer a { color: var(--primary); text-decoration: none; font-weight: bold; }
-        .copyright { margin-top: 20px; font-size: 0.85rem; max-width: 700px; margin-left: auto; margin-right: auto; opacity: 0.8; }
+        .copyright { margin-top: 20px; font-size: 0.8rem; max-width: 700px; margin-left: auto; margin-right: auto; opacity: 0.8; line-height: 1.4; }
 
-        /* Responsividade */
-		@media (max-width: 768px) {
-			.nav-group { gap: 10px; } /* Reduz o espaço entre os links */
-			.nav-item a { font-size: 0.75rem; }
-			.logo { padding: 0 5px; margin-top: -30px;}
-			
-			/* Controla o tamanho da imagem do logo no celular */
-			.logo img {
-				height: 100px; /* Altura menor para caber na tela do celular */
-			}
-		}
-		
+        /* ==========================================================================
+           MEDIA QUERIES (Ajustes para Desktop e Telas Grandes)
+           ========================================================================== */
+        @media (min-width: 769px) {
+            nav { height: 80px; align-items: center; }
+            .nav-menu { align-items: center; padding: 0; }
+            .nav-group { gap: 30px; padding-top: 0; }
+            
+            .logo { margin-top: 0; }
+            .logo img {
+                height: 150px; /* Logo grande conforme seu ajuste */
+                margin-top: 65px; /* Empurra o corpo da imagem para baixo, partindo do topo */
+            }
+
+            .nav-item a { font-size: 0.9rem; }
+            .submenu { min-width: 220px; padding: 10px 0; left: 0; transform: none; }
+            .submenu li a { font-size: 0.9rem; text-align: left; padding: 10px 20px; }
+
+            section { padding: 140px 20px 80px 20px; }
+            h2 { font-size: 2.2rem; margin-bottom: 40px; }
+
+            .sobre-container { flex-direction: row; gap: 40px; }
+            .sobre-foto { flex: 1; text-align: center; }
+            .sobre-foto img { max-width: 350px; border: 5px solid var(--dark); }
+            .sobre-texto { flex: 2; text-align: left; }
+            .btn-portfolio { width: auto; }
+
+            .loja-box { padding: 50px; }
+            .btn-loja { font-size: 1.2rem; }
+            .copyright { font-size: 0.85rem; }
+        }
     </style>
 </head>
 <body>
@@ -121,7 +210,7 @@
                 </div>
 
                 <!-- Logo Central -->
-                <a href="#" class="logo"><img src="imgs/gg.png" title="Gigante Guerreiro" /></a>
+                <a href="#" class="logo"><img src="imgs/gg.png" title="Ateliê Gigante Guerreiro" alt="Logo Ateliê Gigante Guerreiro" /></a>
 
                 <!-- Direita -->
                 <div class="nav-group">
